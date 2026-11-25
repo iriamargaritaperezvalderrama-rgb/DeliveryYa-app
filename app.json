@@ -1,27 +1,11 @@
 {
   "expo": {
-    "name": "deliveryya",
-    "slug": "snack-3ff29c74-2bf4-4816-aa26-24bc09a87b0b",
+    "name": "DeliveryYa",
+    "slug": "deliveryya",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
-    "userInterfaceStyle": "light",
-    "ios": {
-      "supportsTablet": true
-    },
     "android": {
-      "package": "com.irwinfer.deliveryya",
-
-      "adaptiveIcon": {
-        "backgroundColor": "#E6F4FE",
-        "foregroundImage": "./assets/android-icon-foreground.png",
-        "backgroundImage": "./assets/android-icon-background.png",
-        "monochromeImage": "./assets/android-icon-monochrome.png"
-      }
-    },
-    "web": {
-      "favicon": "./assets/favicon.png"
-    },
-    "description": "Entregas rápidas de comidas y encomiendas "
+      "package": "com.irwinfer.deliveryya"
+    }
   }
 }
