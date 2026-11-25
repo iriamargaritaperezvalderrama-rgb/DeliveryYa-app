@@ -9,10 +9,10 @@
   "theme_color": "#FF5500",
   "icons": [
     {
-      "src": "https://flaticon.com",
+      "src": "https://githubassets.com",
       "sizes": "512x512",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "any"
     }
   ]
 }
