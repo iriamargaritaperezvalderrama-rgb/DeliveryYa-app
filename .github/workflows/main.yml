@@ -18,28 +18,8 @@ jobs:
       - run: npm install
       - run: npx expo install react-dom react-native-web
       - run: npx expo export --platform web
-      - run: |
-          python3 -c '
-          import zlib, struct, json
-          w, h = 512, 512
-          raw = b"".join(b"\x00" + b"\xff\x55\x00" * w for _ in range(h))
-          def chunk(t, d):
-              return struct.pack(">I", len(d)) + t + d + struct.pack(">I", zlib.crc32(t + d) & 0xffffffff)
-          png = b"\x89PNG\r\n\x1a\n" + chunk(b"IHDR", struct.pack(">IIBBBBB", w, h, 8, 2, 0, 0, 0)) + chunk(b"IDAT", zlib.compress(raw)) + chunk(b"IEND", b"")
-          open("dist/icon.png", "wb").write(png)
-          manifest = {
-              "name": "DeliveryYa",
-              "short_name": "DeliveryYa",
-              "description": "Comidas y encomiendas en moto",
-              "start_url": "/DeliveryYa-app/",
-              "scope": "/DeliveryYa-app/",
-              "display": "standalone",
-              "background_color": "#ffffff",
-              "theme_color": "#FF5500",
-              "icons": [{"src": "/DeliveryYa-app/icon.png", "sizes": "512x512", "type": "image/png", "purpose": "any"}]
-          }
-          open("dist/manifest.json", "w").write(json.dumps(manifest, indent=2))
-          '
+      - run: cp public/icon.png dist/icon.png
+      - run: cp public/manifest.json dist/manifest.json
       - run: sed -i 's|</head>|<link rel="manifest" href="/DeliveryYa-app/manifest.json" /></head>|' dist/index.html
       - uses: actions/upload-pages-artifact@v3
         with:
