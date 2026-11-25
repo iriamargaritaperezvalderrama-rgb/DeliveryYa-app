@@ -6,6 +6,9 @@
     "orientation": "portrait",
     "android": {
       "package": "com.irwinfer.deliveryya"
+    },
+    "experiments": {
+      "baseUrl": "/DeliveryYa-app"
     }
   }
 }
