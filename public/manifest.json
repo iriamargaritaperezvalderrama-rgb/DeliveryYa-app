@@ -9,7 +9,7 @@
   "theme_color": "#FF5500",
   "icons": [
     {
-      "src": "https://githubassets.com",
+      "src": "/DeliveryYa-app/icon.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any"
