@@ -16,6 +16,7 @@ jobs:
         with:
           node-version: 20
       - run: npm install
+      - run: npx expo install react-dom react-native-web
       - run: npx expo export --platform web
       - uses: actions/upload-pages-artifact@v3
         with:
