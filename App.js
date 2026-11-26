@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { Text, View, TouchableOpacity, SafeAreaView, StatusBar, TextInput, Alert, ScrollView, Linking } from 'react-native';
-import { WHATSAPP_CENTRAL, ZONAS_ENVIO, RESTAURANTES } from './Datos';
+import { Text, View, TouchableOpacity, SafeAreaView, ScrollView, TextInput, StatusBar, Linking, Alert } from 'react-native';
+import { WHATSAPP_VZLA, WHATSAPP_ECU, ZONAS_ENVIO, RESTAURANTES } from './Datos';
 import { st } from './Estilos';
 
 export default function App() {
@@ -14,25 +14,25 @@ export default function App() {
   const [destino, setDestino] = useState('');
   const [paquete, setPaquete] = useState('');
 
-  const agregar = (plato, restNombre) => setCarrito([...carrito, { ...plato, rest: restNombre, uid: Math.random() }]);
+  const agregar = (plato, restNombre) => setCarrito([...carrito, { ...plato, restNombre, uid: Math.random().toString() }]);
   const quitar = (uid) => setCarrito(carrito.filter(i => i.uid !== uid));
   const subtotal = () => carrito.reduce((s, i) => s + i.precio, 0);
 
-  const abrirWhatsApp = (msg) => {
-    Linking.openURL(`https://wa.me{WHATSAPP_CENTRAL}?text=${encodeURIComponent(msg)}`).catch(() => Alert.alert('Pedido', msg));
+  const abrirWhatsapp = (numero, msg) => {
+    Linking.openURL(`https://wa.me{numero}?text=${encodeURIComponent(msg)}`);
   };
 
-  const enviarComida = () => {
-    if (!dirComida.trim()) return Alert.alert('Falta dirección', 'Escribe urbanización, calle y referencia.');
+  const enviarComida = (numero) => {
+    if (!dirComida.trim()) return Alert.alert('Falta dirección', 'Por favor escribe tu dirección de entrega.');
     const total = (subtotal() + zonaSel.precio).toFixed(2);
-    const items = carrito.map(i => `- ${i.nombre} ($${i.precio.toFixed(2)})`).join('\n');
-    abrirWhatsApp(`🛵 *PEDIDO COMIDA - DeliveryYa*\n\n${items}\n\n📍 Zona: ${zonaSel.nombre} ($${zonaSel.precio.toFixed(2)})\n*TOTAL A PAGAR: $${total}*\n💳 Pago: ${pago}\n🏠 Dirección: ${dirComida}`);
+    const items = carrito.map(i => `- ${i.nombre} (${i.restNombre}): $${i.precio.toFixed(2)}`).join('\n');
+    abrirWhatsapp(numero, `🛵 *PEDIDO COMIDA - DeliveryYa*\n\n${items}\n\n📍 *Zona:* ${zonaSel.nombre} ($${zonaSel.precio.toFixed(2)})\n🏠 *Dirección:* ${dirComida}\n💳 *Pago:* ${pago}\n💰 *TOTAL:* $${total}`);
     setCarrito([]); setDirComida(''); setPantalla('inicio');
   };
 
-  const enviarEncomienda = () => {
-    if (!origen || !destino || !paquete) return Alert.alert('Faltan datos', 'Completa origen, destino y paquete.');
-    abrirWhatsApp(`📦 *ENCOMIENDA MOTO - DeliveryYa*\n\n🟢 Recoger: ${origen}\n🔴 Entregar: ${destino}\n🎒 Paquete: ${paquete}\n📍 Zona: ${zonaSel.nombre}\n💳 Pago: ${pago}\n💵 *TOTAL CARRERA: $${zonaSel.precio.toFixed(2)}*`);
+  const enviarEncomienda = (numero) => {
+    if (!origen || !destino || !paquete) return Alert.alert('Faltan datos', 'Por favor completa origen, destino y qué envías.');
+    abrirWhatsapp(numero, `📦 *ENCOMIENDA MOTO - DeliveryYa*\n\n🟢 *Retiro:* ${origen}\n🔴 *Entrega:* ${destino}\n📦 *Paquete:* ${paquete}\n📍 *Zona:* ${zonaSel.nombre}\n💳 *Pago:* ${pago}\n💰 *Tarifa Delivery:* $${zonaSel.precio.toFixed(2)}`);
     setOrigen(''); setDestino(''); setPaquete(''); setPantalla('inicio');
   };
 
@@ -40,9 +40,9 @@ export default function App() {
     <View style={{ marginBottom: 12 }}>
       <Text style={st.label}>Selecciona la zona de entrega:</Text>
       {ZONAS_ENVIO.map(z => (
-        <TouchableOpacity key={z.id} style={[st.zonaBtn, zonaSel.id === z.id && st.zonaAct]} onPress={() => setZonaSel(z)}>
+        <TouchableOpacity key={z.id} style={[st.zonaBtn, zonaSel.id === z.id && st.zonaActive]} onPress={() => setZonaSel(z)}>
           <Text style={zonaSel.id === z.id ? st.wText : st.bold}>{z.nombre}</Text>
-          <Text style={zonaSel.id === z.id ? st.wText : st.price}>${z.precio.toFixed(2)}</Text>
+          <Text style={zonaSel.id === z.id ? st.wText : st.bold}>${z.precio.toFixed(2)}</Text>
         </TouchableOpacity>
       ))}
     </View>
@@ -50,7 +50,7 @@ export default function App() {
 
   return (
     <SafeAreaView style={st.container}>
-      <StatusBar barStyle="light-content" backgroundColor="#FF5722" />
+      <StatusBar barStyle="light-content" backgroundColor="#FF5500" />
       <View style={st.header}>
         <Text style={st.hTitle}>🛵 DeliveryYa</Text>
         <Text style={st.hSub}>Comidas y encomiendas en moto</Text>
@@ -59,27 +59,27 @@ export default function App() {
       {pantalla === 'inicio' && (
         <View style={st.content}>
           <Text style={st.qText}>¿Qué necesitas hoy?</Text>
-          <TouchableOpacity style={[st.card, { backgroundColor: '#FF5722' }]} onPress={() => setPantalla('restaurantes')}>
+          <TouchableOpacity style={[st.card, { backgroundColor: '#FFF3E0' }]} onPress={() => setPantalla('restaurantes')}>
             <Text style={st.emoji}>🍔</Text>
-            <View style={{ flex: 1 }}><Text style={st.cTitle}>Pedir Comida</Text><Text style={st.cDesc}>Restaurantes locales a tu puerta</Text></View>
+            <View style={{ flex: 1 }}><Text style={st.cTitle}>Pedir Comida</Text><Text style={st.cSub}>Restaurantes y comida rápida</Text></View>
           </TouchableOpacity>
-          <TouchableOpacity style={[st.card, { backgroundColor: '#1E88E5' }]} onPress={() => setPantalla('encomienda')}>
+          <TouchableOpacity style={[st.card, { backgroundColor: '#E3F2FD' }]} onPress={() => setPantalla('encomienda')}>
             <Text style={st.emoji}>📦</Text>
-            <View style={{ flex: 1 }}><Text style={st.cTitle}>Enviar Encomienda</Text><Text style={st.cDesc}>Mandados y paquetes en moto</Text></View>
+            <View style={{ flex: 1 }}><Text style={st.cTitle}>Enviar Encomienda</Text><Text style={st.cSub}>Paquetes, llaves y mandados</Text></View>
           </TouchableOpacity>
         </View>
       )}
 
       {pantalla === 'restaurantes' && (
         <ScrollView style={st.content}>
-          <Text style={st.sTitle}>🍴 Elige un Local</Text>
+          <Text style={st.sTitle}>🍽️ Elige un Local</Text>
           {RESTAURANTES.map(r => (
             <TouchableOpacity key={r.id} style={st.restCard} onPress={() => { setRestSel(r); setPantalla('menu'); }}>
               <Text style={{ fontSize: 30, marginRight: 12 }}>{r.emoji}</Text>
               <View style={{ flex: 1 }}><Text style={st.bold}>{r.nombre}</Text><Text style={st.gray}>{r.categoria}</Text></View>
             </TouchableOpacity>
           ))}
-          <TouchableOpacity style={st.backBtn} onPress={() => setPantalla('inicio')}><Text style={st.gray}>← Volver</Text></TouchableOpacity>
+          <TouchableOpacity style={st.backBtn} onPress={() => setPantalla('inicio')}><Text style={st.bold}>← Volver al inicio</Text></TouchableOpacity>
         </ScrollView>
       )}
 
@@ -93,12 +93,12 @@ export default function App() {
                 <TouchableOpacity style={st.addBtn} onPress={() => agregar(p, restSel.nombre)}><Text style={st.wText}>+ Agregar</Text></TouchableOpacity>
               </View>
             ))}
-            <TouchableOpacity style={st.backBtn} onPress={() => setPantalla('restaurantes')}><Text style={st.gray}>← Otros locales</Text></TouchableOpacity>
+            <TouchableOpacity style={st.backBtn} onPress={() => setPantalla('restaurantes')}><Text style={st.bold}>← Otros locales</Text></TouchableOpacity>
           </ScrollView>
           {carrito.length > 0 && (
             <TouchableOpacity style={st.cartBar} onPress={() => setPantalla('carrito')}>
               <Text style={st.wText}>🛒 Ver Carrito ({carrito.length})</Text>
-              <Text style={st.wText}>${subtotal().toFixed(2)}</Text>
+              <Text style={st.wText}>${subtotal().toFixed(2)} →</Text>
             </TouchableOpacity>
           )}
         </View>
@@ -109,44 +109,46 @@ export default function App() {
           <Text style={st.sTitle}>🛒 Tu Pedido</Text>
           {carrito.map(i => (
             <View key={i.uid} style={st.platoCard}>
-              <View style={{ flex: 1 }}><Text style={st.bold}>{i.nombre}</Text><Text style={st.gray}>${i.precio.toFixed(2)}</Text></View>
-              <TouchableOpacity onPress={() => quitar(i.uid)}><Text style={{ color: 'red' }}>Quitar</Text></TouchableOpacity>
+              <View style={{ flex: 1 }}><Text style={st.bold}>{i.nombre}</Text><Text style={st.gray}>{i.restNombre} • ${i.precio.toFixed(2)}</Text></View>
+              <TouchableOpacity onPress={() => quitar(i.uid)}><Text style={{ color: 'red', fontWeight: 'bold' }}>Quitar</Text></TouchableOpacity>
             </View>
           ))}
           <SelectorZonas />
           <View style={st.box}>
-            <Text>Comida: ${subtotal().toFixed(2)} | Moto: ${zonaSel.precio.toFixed(2)}</Text>
-            <Text style={[st.bold, { fontSize: 16, marginTop: 5 }]}>Total a pagar: ${(subtotal() + zonaSel.precio).toFixed(2)}</Text>
+            <Text>Comida: ${subtotal().toFixed(2)} | Delivery: ${zonaSel.precio.toFixed(2)}</Text>
+            <Text style={[st.bold, { fontSize: 16, marginTop: 4 }]}>Total a pagar: ${(subtotal() + zonaSel.precio).toFixed(2)}</Text>
           </View>
           <View style={st.payRow}>
             {['Efectivo ($)', 'Pago Móvil', 'Zelle'].map(m => (
-              <TouchableOpacity key={m} style={[st.payBtn, pago === m && st.payAct]} onPress={() => setPago(m)}>
+              <TouchableOpacity key={m} style={[st.payBtn, pago === m && st.payActive]} onPress={() => setPago(m)}>
                 <Text style={pago === m ? st.wText : st.bold}>{m}</Text>
               </TouchableOpacity>
             ))}
           </View>
-          <TextInput style={st.input} placeholder="Urbanización, calle y referencia" value={dirComida} onChangeText={setDirComida} />
-          <TouchableOpacity style={st.okBtn} onPress={enviarComida}><Text style={st.wText}>Enviar por WhatsApp</Text></TouchableOpacity>
-          <TouchableOpacity style={st.backBtn} onPress={() => setPantalla('menu')}><Text style={st.gray}>← Seguir pidiendo</Text></TouchableOpacity>
+          <TextInput style={st.input} placeholder="Dirección exacta de entrega..." value={dirComida} onChangeText={setDirComida} />
+          <TouchableOpacity style={st.okBtn} onPress={() => enviarComida(WHATSAPP_VZLA)}><Text style={st.wText}>📲 Pedir por WhatsApp (Venezuela)</Text></TouchableOpacity>
+          <TouchableOpacity style={st.blueBtn} onPress={() => enviarComida(WHATSAPP_ECU)}><Text style={st.wText}>📲 Pedir por WhatsApp (Ecuador)</Text></TouchableOpacity>
+          <TouchableOpacity style={st.backBtn} onPress={() => setPantalla('menu')}><Text style={st.bold}>← Seguir pidiendo</Text></TouchableOpacity>
         </ScrollView>
       )}
 
       {pantalla === 'encomienda' && (
         <ScrollView style={st.content}>
           <Text style={st.sTitle}>📦 Encomienda en Moto</Text>
-          <TextInput style={st.input} placeholder="Recoger en (Sector y referencia)" value={origen} onChangeText={setOrigen} />
-          <TextInput style={st.input} placeholder="Entregar en (Sector y referencia)" value={destino} onChangeText={setDestino} />
-          <TextInput style={st.input} placeholder="¿Qué envías?" value={paquete} onChangeText={setPaquete} />
+          <TextInput style={st.input} placeholder="¿Dónde retiramos el paquete?" value={origen} onChangeText={setOrigen} />
+          <TextInput style={st.input} placeholder="¿Dónde lo entregamos?" value={destino} onChangeText={setDestino} />
+          <TextInput style={st.input} placeholder="¿Qué envías? (Ej: Llaves, comida, caja)" value={paquete} onChangeText={setPaquete} />
           <SelectorZonas />
           <View style={st.payRow}>
             {['Efectivo ($)', 'Pago Móvil', 'Zelle'].map(m => (
-              <TouchableOpacity key={m} style={[st.payBtn, pago === m && st.payAct]} onPress={() => setPago(m)}>
+              <TouchableOpacity key={m} style={[st.payBtn, pago === m && st.payActive]} onPress={() => setPago(m)}>
                 <Text style={pago === m ? st.wText : st.bold}>{m}</Text>
               </TouchableOpacity>
             ))}
           </View>
-          <TouchableOpacity style={st.blueBtn} onPress={enviarEncomienda}><Text style={st.wText}>Pedir Moto (${zonaSel.precio.toFixed(2)})</Text></TouchableOpacity>
-          <TouchableOpacity style={st.backBtn} onPress={() => setPantalla('inicio')}><Text style={st.gray}>← Volver</Text></TouchableOpacity>
+          <TouchableOpacity style={st.okBtn} onPress={() => enviarEncomienda(WHATSAPP_VZLA)}><Text style={st.wText}>📲 Enviar a WhatsApp (Venezuela)</Text></TouchableOpacity>
+          <TouchableOpacity style={st.blueBtn} onPress={() => enviarEncomienda(WHATSAPP_ECU)}><Text style={st.wText}>📲 Enviar a WhatsApp (Ecuador)</Text></TouchableOpacity>
+          <TouchableOpacity style={st.backBtn} onPress={() => setPantalla('inicio')}><Text style={st.bold}>← Volver al inicio</Text></TouchableOpacity>
         </ScrollView>
       )}
     </SafeAreaView>
