@@ -1,7 +1,6 @@
 export const WHATSAPP_VZLA = '584243568430';
 export const WHATSAPP_ECU = '593986973520';
 
-
 export const ZONAS_ENVIO = [
   { id: 'z1', nombre: 'Zona Céntrica (Corta)', precio: 1.50 },
   { id: 'z2', nombre: 'Zona Intermedia (Media)', precio: 2.50 },
