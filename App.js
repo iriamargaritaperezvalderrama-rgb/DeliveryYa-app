@@ -24,7 +24,11 @@ export default function App() {
   const quitar = (uid) => setCarrito(carrito.filter(i => i.uid !== uid));
   const subtotal = () => carrito.reduce((s, i) => s + i.precio, 0);
 
-  const abrirWhatsapp = (numero, msg) => {
+    const abrirWhatsapp = (numero, msg) => {
+    const enlace = 'https://whatsapp.com' + numero + '&text=' + encodeURIComponent(msg);
+    window.location.href = enlace;
+  };
+
     const enlace = 'https://wa.me' + numero + '?text=' + encodeURIComponent(msg);
     if (Platform.OS === 'web') {
       window.location.href = enlace;
