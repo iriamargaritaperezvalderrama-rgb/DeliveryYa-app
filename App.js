@@ -178,3 +178,23 @@ export default function App() {
       {pantalla === 'encomienda' && (
         <ScrollView style={st.content}>
           <Text style={st.sTitle}>📦 Encomienda en Moto</Text>
+          <TextInput style={st.input} placeholder="¿Dónde retiramos el paquete?" value={origen} onChangeText={setOrigen} />
+          <TextInput style={st.input} placeholder="¿Dónde lo entregamos?" value={destino} onChangeText={setDestino} />
+          <TextInput style={st.input} placeholder="¿Qué envías? (Ej: Llaves, comida, caja)" value={paquete} onChangeText={setPaquete} />
+          <SelectorZonas />
+          <View style={st.payRow}>
+            {['Efectivo ($)', 'Pago Móvil', 'Zelle'].map(m => (
+              <TouchableOpacity key={m} style={[st.payBtn, pago === m && { backgroundColor: '#FF5500', borderColor: '#FF5500' }]} onPress={() => setPago(m)}>
+                <Text style={pago === m ? st.wText : st.bold}>{m}</Text>
+              </TouchableOpacity>
+            ))}
+          </View>
+          <InfoPagoMovil pago={pago} />
+          <TouchableOpacity style={st.okBtn} onPress={() => enviarEncomienda(WHATSAPP_VZLA)}><Text style={st.wText}>📲 Enviar a WhatsApp (Venezuela)</Text></TouchableOpacity>
+          <TouchableOpacity style={st.blueBtn} onPress={() => enviarEncomienda(WHATSAPP_ECU)}><Text style={st.wText}>📲 Enviar a WhatsApp (Ecuador)</Text></TouchableOpacity>
+          <TouchableOpacity style={st.backBtn} onPress={() => setPantalla('inicio')}><Text style={st.bold}>← Volver al inicio</Text></TouchableOpacity>
+        </ScrollView>
+      )}
+    </SafeAreaView>
+  );
+}
