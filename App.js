@@ -79,6 +79,20 @@ export default function App() {
             <Text style={st.emoji}>📦</Text>
             <View style={{ flex: 1 }}><Text style={[st.cTitle, { color: '#111111' }]}>Enviar Encomienda</Text><Text style={st.cSub}>Paquetes, llaves y mandados</Text></View>
           </TouchableOpacity>
+                  <TouchableOpacity
+            style={[st.okBtn, { marginTop: 12 }]}
+            onPress={() => {
+              const textoCompartir = '🛵 ¡Pide comida o envía encomiendas rápido con *DeliveryYa*! Entra aquí: https://github.io';
+              const link = document.createElement('a');
+              link.href = 'whatsapp://send?text=' + encodeURIComponent(textoCompartir);
+              document.body.appendChild(link);
+              link.click();
+              document.body.removeChild(link);
+            }}
+          >
+            <Text style={st.wText}>📲 Compartir DeliveryYa por WhatsApp</Text>
+          </TouchableOpacity>
+
         </View>
       )}
 
