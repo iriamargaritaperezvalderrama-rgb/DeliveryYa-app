@@ -82,7 +82,9 @@ export default function App() {
                   <TouchableOpacity
             style={[st.okBtn, { marginTop: 12 }]}
             onPress={() => {
-              const textoCompartir = '🛵 ¡Pide comida o envía encomiendas rápido con *DeliveryYa*! Entra aquí: https://github.io';
+                                        const textoCompartir = '🛵 ¡Pide comida o envía encomiendas rápido con *DeliveryYa*! Entra aquí: https://iriamargaritaperezvalderrama-rgb.github.io/DeliveryYa-app/';
+  
+
               const link = document.createElement('a');
               link.href = 'whatsapp://send?text=' + encodeURIComponent(textoCompartir);
               document.body.appendChild(link);
