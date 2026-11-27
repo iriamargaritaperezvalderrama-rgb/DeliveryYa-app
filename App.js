@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Text, View, TouchableOpacity, SafeAreaView, ScrollView, TextInput, StatusBar, Linking, Platform } from 'react-native';
+import { Text, View, TouchableOpacity, SafeAreaView, ScrollView, TextInput, StatusBar, Platform } from 'react-native';
 import { WHATSAPP_VZLA, WHATSAPP_ECU, ZONAS_ENVIO, RESTAURANTES } from './Datos';
 import { st } from './Estilos';
 
@@ -7,7 +7,7 @@ export default function App() {
   const [pantalla, setPantalla] = useState('inicio');
   const [restSel, setRestSel] = useState(null);
   const [carrito, setCarrito] = useState([]);
-  const [zonaSel, setZonaSel] = useState(ZONAS_ENVIO[0]);
+  const [zonaSel, setZonaSel] = useState(ZONAS_ENVIO);
   const [dirComida, setDirComida] = useState('');
   const [pago, setPago] = useState('Efectivo ($)');
   const [origen, setOrigen] = useState('');
@@ -26,12 +26,12 @@ export default function App() {
 
   const abrirWhatsapp = (numero, msg) => {
     const cleanNum = String(numero).replace(/[^0-9]/g, '');
-    const enlace = 'https://whatsapp.com' + cleanNum + '&text=' + encodeURIComponent(msg);
-    Linking.openURL(enlace).catch(() => {
-      if (typeof window !== 'undefined') {
-        window.open(enlace, '_blank');
-      }
-    });
+    const textoCod = encodeURIComponent(msg);
+    const link = document.createElement('a');
+    link.href = 'whatsapp://send?phone=' + cleanNum + '&text=' + textoCod;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   };
 
   const enviarComida = (numero) => {
@@ -75,11 +75,11 @@ export default function App() {
           <Text style={st.qText}>¿Qué necesitas hoy?</Text>
           <TouchableOpacity style={[st.card, { backgroundColor: '#FFF3E0' }]} onPress={() => setPantalla('restaurantes')}>
             <Text style={st.emoji}>🍔</Text>
-            <View style={{ flex: 1 }}><Text style={st.cTitle}>Pedir Comida</Text><Text style={st.cSub}>Restaurantes y comida rápida</Text></View>
+            <View style={{ flex: 1 }}><Text style={[st.cTitle, { color: '#111111' }]}>Pedir Comida</Text><Text style={st.cSub}>Restaurantes y comida rápida</Text></View>
           </TouchableOpacity>
           <TouchableOpacity style={[st.card, { backgroundColor: '#E3F2FD' }]} onPress={() => setPantalla('encomienda')}>
             <Text style={st.emoji}>📦</Text>
-            <View style={{ flex: 1 }}><Text style={st.cTitle}>Enviar Encomienda</Text><Text style={st.cSub}>Paquetes, llaves y mandados</Text></View>
+            <View style={{ flex: 1 }}><Text style={[st.cTitle, { color: '#111111' }]}>Enviar Encomienda</Text><Text style={st.cSub}>Paquetes, llaves y mandados</Text></View>
           </TouchableOpacity>
         </View>
       )}
