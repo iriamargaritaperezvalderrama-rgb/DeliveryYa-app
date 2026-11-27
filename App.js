@@ -98,8 +98,10 @@ export default function App() {
             style={[st.blueBtn, { marginTop: 10 }]}
             onPress={() => {
               const link = document.createElement('a');
-                 const base = 'https://github.com/iriamargaritaperezvalderrama-rgb';
-              link.href = base + '/DeliveryYa-app/raw/main/DeliveryYa.apk';
+                            const base = 'https://iriamargaritaperezvalderrama-rgb.github.io';
+              link.href = base + '/DeliveryYa-app/DeliveryYa.apk';
+
+              
              
 
               link.download = 'DeliveryYa.apk';
