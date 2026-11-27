@@ -8,7 +8,7 @@ export default function App() {
   const [pantalla, setPantalla] = useState('inicio');
   const [restSel, setRestSel] = useState(null);
   const [carrito, setCarrito] = useState([]);
-  const [zonaSel, setZonaSel] = useState(ZONAS_ENVIO[0]);
+  const [zonaSel, setZonaSel] = useState(ZONAS_ENVIO);
   const [dirComida, setDirComida] = useState('');
   const [pago, setPago] = useState('Efectivo ($)');
   const [origen, setOrigen] = useState('');
@@ -36,14 +36,14 @@ export default function App() {
     if (!dirComida.trim()) return avisar('Falta dirección', 'Por favor escribe tu dirección exacta de entrega.');
     const total = (subtotal() + zonaSel.precio).toFixed(2);
     const items = carrito.map(i => '- ' + i.nombre + ' (' + i.restNombre + '): $' + i.precio.toFixed(2)).join('\n');
-    const texto = '🛵 *PEDIDO COMIDA - DeliveryYa*\n\n' + items + '\n\n📍 *Zona:* ' + zonaSel.nombre + ' ($' + zonaSel.precio.toFixed(2) + ')\n🏠 *Dirección:* ' + dirComida + '\n💳 *Pago:* ' + pago + '\n💰 *TOTAL:* $' + total;
+    const texto = '🛵 *PEDIDO COMIDA - DeliveryYaa@*\n\n' + items + '\n\n📍 *Zona:* ' + zonaSel.nombre + ' ($' + zonaSel.precio.toFixed(2) + ')\n🏠 *Dirección:* ' + dirComida + '\n💳 *Pago:* ' + pago + '\n💰 *TOTAL:* $' + total;
     abrirWhatsapp(numero, texto);
     setCarrito([]); setDirComida(''); setPantalla('inicio');
   };
 
   const enviarEncomienda = (numero) => {
     if (!origen.trim() || !destino.trim() || !paquete.trim()) return avisar('Faltan datos', 'Por favor completa origen, destino y qué envías.');
-    const texto = '📦 *ENCOMIENDA MOTO - DeliveryYa*\n\n🟢 *Retiro:* ' + origen + '\n🔴 *Entrega:* ' + destino + '\n📦 *Paquete:* ' + paquete + '\n📍 *Zona:* ' + zonaSel.nombre + '\n💳 *Pago:* ' + pago + '\n💰 *Tarifa Delivery:* $' + zonaSel.precio.toFixed(2);
+    const texto = '📦 *ENCOMIENDA MOTO - DeliveryYaa@*\n\n🟢 *Retiro:* ' + origen + '\n🔴 *Entrega:* ' + destino + '\n📦 *Paquete:* ' + paquete + '\n📍 *Zona:* ' + zonaSel.nombre + '\n💳 *Pago:* ' + pago + '\n💰 *Tarifa Delivery:* $' + zonaSel.precio.toFixed(2);
     abrirWhatsapp(numero, texto);
     setOrigen(''); setDestino(''); setPaquete(''); setPantalla('inicio');
   };
@@ -64,7 +64,7 @@ export default function App() {
     <SafeAreaView style={st.container}>
       <StatusBar barStyle="light-content" backgroundColor="#FF5500" />
       <View style={st.header}>
-        <Text style={st.hTitle}>🛵 DeliveryYa</Text>
+        <Text style={st.hTitle}>🛵 DeliveryYaa@</Text>
         <Text style={st.hSub}>Comidas y encomiendas en moto</Text>
       </View>
 
@@ -79,12 +79,10 @@ export default function App() {
             <Text style={st.emoji}>📦</Text>
             <View style={{ flex: 1 }}><Text style={[st.cTitle, { color: '#111111' }]}>Enviar Encomienda</Text><Text style={st.cSub}>Paquetes, llaves y mandados</Text></View>
           </TouchableOpacity>
-                  <TouchableOpacity
+          <TouchableOpacity
             style={[st.okBtn, { marginTop: 12 }]}
             onPress={() => {
-                                        const textoCompartir = '🛵 ¡Pide comida o envía encomiendas rápido con *DeliveryYa*! Entra aquí: https://iriamargaritaperezvalderrama-rgb.github.io/DeliveryYa-app/';
-  
-
+              const textoCompartir = '🛵 ¡Pide comida o envía encomiendas rápido con *DeliveryYaa@*! Entra aquí: https://github.io';
               const link = document.createElement('a');
               link.href = 'whatsapp://send?text=' + encodeURIComponent(textoCompartir);
               document.body.appendChild(link);
@@ -92,18 +90,14 @@ export default function App() {
               document.body.removeChild(link);
             }}
           >
-            <Text style={st.wText}>📲 Compartir DeliveryYa por WhatsApp</Text>
+            <Text style={st.wText}>📲 Compartir DeliveryYaa@ por WhatsApp</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={[st.blueBtn, { marginTop: 10 }]}
             onPress={() => {
               const link = document.createElement('a');
-                            const base = 'https://iriamargaritaperezvalderrama-rgb.github.io';
+              const base = 'https://github.io';
               link.href = base + '/DeliveryYa-app/DeliveryYa.apk';
-
-              
-             
-
               link.download = 'DeliveryYa.apk';
               document.body.appendChild(link);
               link.click();
@@ -115,7 +109,6 @@ export default function App() {
           <Text style={[st.gray, { textAlign: 'center', marginTop: 8, fontSize: 12 }]}>
             📱 En iPhone: toca Compartir (⬆️) y "Agregar a inicio"
           </Text>
-
         </View>
       )}
 
@@ -185,23 +178,3 @@ export default function App() {
       {pantalla === 'encomienda' && (
         <ScrollView style={st.content}>
           <Text style={st.sTitle}>📦 Encomienda en Moto</Text>
-          <TextInput style={st.input} placeholder="¿Dónde retiramos el paquete?" value={origen} onChangeText={setOrigen} />
-          <TextInput style={st.input} placeholder="¿Dónde lo entregamos?" value={destino} onChangeText={setDestino} />
-          <TextInput style={st.input} placeholder="¿Qué envías? (Ej: Llaves, comida, caja)" value={paquete} onChangeText={setPaquete} />
-          <SelectorZonas />
-          <View style={st.payRow}>
-            {['Efectivo ($)', 'Pago Móvil', 'Zelle'].map(m => (
-              <TouchableOpacity key={m} style={[st.payBtn, pago === m && { backgroundColor: '#FF5500', borderColor: '#FF5500' }]} onPress={() => setPago(m)}>
-                <Text style={pago === m ? st.wText : st.bold}>{m}</Text>
-              </TouchableOpacity>
-            ))}
-          </View>
-          <InfoPagoMovil pago={pago} />
-          <TouchableOpacity style={st.okBtn} onPress={() => enviarEncomienda(WHATSAPP_VZLA)}><Text style={st.wText}>📲 Enviar a WhatsApp (Venezuela)</Text></TouchableOpacity>
-          <TouchableOpacity style={st.blueBtn} onPress={() => enviarEncomienda(WHATSAPP_ECU)}><Text style={st.wText}>📲 Enviar a WhatsApp (Ecuador)</Text></TouchableOpacity>
-          <TouchableOpacity style={st.backBtn} onPress={() => setPantalla('inicio')}><Text style={st.bold}>← Volver al inicio</Text></TouchableOpacity>
-        </ScrollView>
-      )}
-    </SafeAreaView>
-  );
-}
