@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Text, View, TouchableOpacity, SafeAreaView, ScrollView, TextInput, StatusBar, Linking, Platform } from 'react-native';
+import { Text, View, TouchableOpacity, SafeAreaView, ScrollView, TextInput, StatusBar, Platform } from 'react-native';
 import { WHATSAPP_VZLA, WHATSAPP_ECU, ZONAS_ENVIO, RESTAURANTES } from './Datos';
 import { st } from './Estilos';
 
@@ -24,17 +24,9 @@ export default function App() {
   const quitar = (uid) => setCarrito(carrito.filter(i => i.uid !== uid));
   const subtotal = () => carrito.reduce((s, i) => s + i.precio, 0);
 
-    const abrirWhatsapp = (numero, msg) => {
+  const abrirWhatsapp = (numero, msg) => {
     const enlace = 'https://whatsapp.com' + numero + '&text=' + encodeURIComponent(msg);
     window.location.href = enlace;
-  };
-
-    const enlace = 'https://wa.me' + numero + '?text=' + encodeURIComponent(msg);
-    if (Platform.OS === 'web') {
-      window.location.href = enlace;
-    } else {
-      Linking.openURL(enlace);
-    }
   };
 
   const enviarComida = (numero) => {
