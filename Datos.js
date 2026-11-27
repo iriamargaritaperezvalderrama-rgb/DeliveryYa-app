@@ -69,3 +69,9 @@ export const RESTAURANTES = [
     ]
   },
 ];
+export const DATOS_PAGO_MOVIL = {
+  banco: 'Banco de Venezuela (0102)',
+  cedula: '8902603',
+  telefono: '04243568430'
+};
+
