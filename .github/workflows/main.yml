@@ -27,8 +27,8 @@ jobs:
           im.resize((192, 192)).save("dist/icon-192.png", "PNG")
           im.resize((512, 512)).save("dist/icon-512.png", "PNG")
           manifest = {
-              "name": "DeliveryYa",
-              "short_name": "DeliveryYa",
+              "name": "DeliveryYaa@",
+              "short_name": "DeliveryYaa@",
               "description": "Comidas y encomiendas en moto",
               "start_url": "/DeliveryYa-app/",
               "scope": "/DeliveryYa-app/",
