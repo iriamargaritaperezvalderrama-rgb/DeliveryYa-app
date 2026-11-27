@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Text, View, TouchableOpacity, SafeAreaView, ScrollView, TextInput, StatusBar, Platform } from 'react-native';
-import { WHATSAPP_VZLA, WHATSAPP_ECU, ZONAS_ENVIO, RESTAURANTES } from './Datos';
+import { WHATSAPP_VZLA, WHATSAPP_ECU, ZONAS_ENVIO, RESTAURANTES, DATOS_PAGO_MOVIL } from './Datos';
 import { st } from './Estilos';
 
 export default function App() {
@@ -61,6 +61,28 @@ export default function App() {
       ))}
     </View>
   );
+
+  const InfoPagoMovil = () => {
+    if (pago !== 'Pago Móvil') return null;
+    const textoCopiar = DATOS_PAGO_MOVIL.banco + '\nCédula: ' + DATOS_PAGO_MOVIL.cedula + '\nTeléfono: ' + DATOS_PAGO_MOVIL.telefono;
+    return (
+      <View style={[st.box, { backgroundColor: '#FFF3E0', borderColor: '#FF5500', borderWidth: 1, marginBottom: 12 }]}>
+        <Text style={[st.bold, { color: '#111111', marginBottom: 4 }]}>📲 Datos para Pago Móvil:</Text>
+        <Text style={{ color: '#111111' }}>🏦 {DATOS_PAGO_MOVIL.banco}</Text>
+        <Text style={{ color: '#111111' }}>🪪 Cédula: {DATOS_PAGO_MOVIL.cedula}</Text>
+        <Text style={{ color: '#111111', marginBottom: 8 }}>📞 Teléfono: {DATOS_PAGO_MOVIL.telefono}</Text>
+        <TouchableOpacity
+          style={{ backgroundColor: '#FF5500', padding: 10, borderRadius: 8, alignItems: 'center' }}
+          onPress={() => {
+            if (navigator.clipboard) navigator.clipboard.writeText(textoCopiar);
+            avisar('Copiado', 'Datos de Pago Móvil copiados para pegar en tu banco.');
+          }}
+        >
+          <Text style={st.wText}>📋 Copiar datos de Pago Móvil</Text>
+        </TouchableOpacity>
+      </View>
+    );
+  };
 
   return (
     <SafeAreaView style={st.container}>
@@ -139,6 +161,7 @@ export default function App() {
               </TouchableOpacity>
             ))}
           </View>
+          <InfoPagoMovil />
           <TextInput style={st.input} placeholder="Dirección exacta de entrega..." value={dirComida} onChangeText={setDirComida} />
           <TouchableOpacity style={st.okBtn} onPress={() => enviarComida(WHATSAPP_VZLA)}><Text style={st.wText}>📲 Pedir por WhatsApp (Venezuela)</Text></TouchableOpacity>
           <TouchableOpacity style={st.blueBtn} onPress={() => enviarComida(WHATSAPP_ECU)}><Text style={st.wText}>📲 Pedir por WhatsApp (Ecuador)</Text></TouchableOpacity>
@@ -151,20 +174,3 @@ export default function App() {
           <Text style={st.sTitle}>📦 Encomienda en Moto</Text>
           <TextInput style={st.input} placeholder="¿Dónde retiramos el paquete?" value={origen} onChangeText={setOrigen} />
           <TextInput style={st.input} placeholder="¿Dónde lo entregamos?" value={destino} onChangeText={setDestino} />
-          <TextInput style={st.input} placeholder="¿Qué envías? (Ej: Llaves, comida, caja)" value={paquete} onChangeText={setPaquete} />
-          <SelectorZonas />
-          <View style={st.payRow}>
-            {['Efectivo ($)', 'Pago Móvil', 'Zelle'].map(m => (
-              <TouchableOpacity key={m} style={[st.payBtn, pago === m && { backgroundColor: '#FF5500', borderColor: '#FF5500' }]} onPress={() => setPago(m)}>
-                <Text style={pago === m ? st.wText : st.bold}>{m}</Text>
-              </TouchableOpacity>
-            ))}
-          </View>
-          <TouchableOpacity style={st.okBtn} onPress={() => enviarEncomienda(WHATSAPP_VZLA)}><Text style={st.wText}>📲 Enviar a WhatsApp (Venezuela)</Text></TouchableOpacity>
-          <TouchableOpacity style={st.blueBtn} onPress={() => enviarEncomienda(WHATSAPP_ECU)}><Text style={st.wText}>📲 Enviar a WhatsApp (Ecuador)</Text></TouchableOpacity>
-          <TouchableOpacity style={st.backBtn} onPress={() => setPantalla('inicio')}><Text style={st.bold}>← Volver al inicio</Text></TouchableOpacity>
-        </ScrollView>
-      )}
-    </SafeAreaView>
-  );
-}
