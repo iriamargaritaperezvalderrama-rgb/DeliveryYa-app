@@ -8,7 +8,7 @@ export default function App() {
   const [pantalla, setPantalla] = useState('inicio');
   const [restSel, setRestSel] = useState(null);
   const [carrito, setCarrito] = useState([]);
-  const [zonaSel, setZonaSel] = useState(ZONAS_ENVIO);
+  const [zonaSel, setZonaSel] = useState(ZONAS_ENVIO[0]);
   const [dirComida, setDirComida] = useState('');
   const [pago, setPago] = useState('Efectivo ($)');
   const [origen, setOrigen] = useState('');
