@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Text, View, TouchableOpacity, SafeAreaView, ScrollView, TextInput, StatusBar, Linking, Alert } from 'react-native';
+import { Text, View, TouchableOpacity, SafeAreaView, ScrollView, TextInput, StatusBar, Linking, Platform } from 'react-native';
 import { WHATSAPP_VZLA, WHATSAPP_ECU, ZONAS_ENVIO, RESTAURANTES } from './Datos';
 import { st } from './Estilos';
 
@@ -14,25 +14,38 @@ export default function App() {
   const [destino, setDestino] = useState('');
   const [paquete, setPaquete] = useState('');
 
+  const avisar = (titulo, mensaje) => {
+    if (Platform.OS === 'web') {
+      window.alert(titulo + ': ' + mensaje);
+    }
+  };
+
   const agregar = (plato, restNombre) => setCarrito([...carrito, { ...plato, restNombre, uid: Math.random().toString() }]);
   const quitar = (uid) => setCarrito(carrito.filter(i => i.uid !== uid));
   const subtotal = () => carrito.reduce((s, i) => s + i.precio, 0);
 
   const abrirWhatsapp = (numero, msg) => {
-    Linking.openURL(`https://wa.me{numero}?text=${encodeURIComponent(msg)}`);
+    const enlace = 'https://wa.me' + numero + '?text=' + encodeURIComponent(msg);
+    if (Platform.OS === 'web') {
+      window.location.href = enlace;
+    } else {
+      Linking.openURL(enlace);
+    }
   };
 
   const enviarComida = (numero) => {
-    if (!dirComida.trim()) return Alert.alert('Falta dirección', 'Por favor escribe tu dirección de entrega.');
+    if (!dirComida.trim()) return avisar('Falta dirección', 'Por favor escribe tu dirección exacta de entrega.');
     const total = (subtotal() + zonaSel.precio).toFixed(2);
-    const items = carrito.map(i => `- ${i.nombre} (${i.restNombre}): $${i.precio.toFixed(2)}`).join('\n');
-    abrirWhatsapp(numero, `🛵 *PEDIDO COMIDA - DeliveryYa*\n\n${items}\n\n📍 *Zona:* ${zonaSel.nombre} ($${zonaSel.precio.toFixed(2)})\n🏠 *Dirección:* ${dirComida}\n💳 *Pago:* ${pago}\n💰 *TOTAL:* $${total}`);
+    const items = carrito.map(i => '- ' + i.nombre + ' (' + i.restNombre + '): $' + i.precio.toFixed(2)).join('\n');
+    const texto = '🛵 *PEDIDO COMIDA - DeliveryYa*\n\n' + items + '\n\n📍 *Zona:* ' + zonaSel.nombre + ' ($' + zonaSel.precio.toFixed(2) + ')\n🏠 *Dirección:* ' + dirComida + '\n💳 *Pago:* ' + pago + '\n💰 *TOTAL:* $' + total;
+    abrirWhatsapp(numero, texto);
     setCarrito([]); setDirComida(''); setPantalla('inicio');
   };
 
   const enviarEncomienda = (numero) => {
-    if (!origen || !destino || !paquete) return Alert.alert('Faltan datos', 'Por favor completa origen, destino y qué envías.');
-    abrirWhatsapp(numero, `📦 *ENCOMIENDA MOTO - DeliveryYa*\n\n🟢 *Retiro:* ${origen}\n🔴 *Entrega:* ${destino}\n📦 *Paquete:* ${paquete}\n📍 *Zona:* ${zonaSel.nombre}\n💳 *Pago:* ${pago}\n💰 *Tarifa Delivery:* $${zonaSel.precio.toFixed(2)}`);
+    if (!origen.trim() || !destino.trim() || !paquete.trim()) return avisar('Faltan datos', 'Por favor completa origen, destino y qué envías.');
+    const texto = '📦 *ENCOMIENDA MOTO - DeliveryYa*\n\n🟢 *Retiro:* ' + origen + '\n🔴 *Entrega:* ' + destino + '\n📦 *Paquete:* ' + paquete + '\n📍 *Zona:* ' + zonaSel.nombre + '\n💳 *Pago:* ' + pago + '\n💰 *Tarifa Delivery:* $' + zonaSel.precio.toFixed(2);
+    abrirWhatsapp(numero, texto);
     setOrigen(''); setDestino(''); setPaquete(''); setPantalla('inicio');
   };
 
@@ -40,7 +53,7 @@ export default function App() {
     <View style={{ marginBottom: 12 }}>
       <Text style={st.label}>Selecciona la zona de entrega:</Text>
       {ZONAS_ENVIO.map(z => (
-        <TouchableOpacity key={z.id} style={[st.zonaBtn, zonaSel.id === z.id && st.zonaActive]} onPress={() => setZonaSel(z)}>
+        <TouchableOpacity key={z.id} style={[st.zonaBtn, zonaSel.id === z.id && { backgroundColor: '#FF5500', borderColor: '#FF5500' }]} onPress={() => setZonaSel(z)}>
           <Text style={zonaSel.id === z.id ? st.wText : st.bold}>{z.nombre}</Text>
           <Text style={zonaSel.id === z.id ? st.wText : st.bold}>${z.precio.toFixed(2)}</Text>
         </TouchableOpacity>
@@ -120,7 +133,7 @@ export default function App() {
           </View>
           <View style={st.payRow}>
             {['Efectivo ($)', 'Pago Móvil', 'Zelle'].map(m => (
-              <TouchableOpacity key={m} style={[st.payBtn, pago === m && st.payActive]} onPress={() => setPago(m)}>
+              <TouchableOpacity key={m} style={[st.payBtn, pago === m && { backgroundColor: '#FF5500', borderColor: '#FF5500' }]} onPress={() => setPago(m)}>
                 <Text style={pago === m ? st.wText : st.bold}>{m}</Text>
               </TouchableOpacity>
             ))}
@@ -141,7 +154,7 @@ export default function App() {
           <SelectorZonas />
           <View style={st.payRow}>
             {['Efectivo ($)', 'Pago Móvil', 'Zelle'].map(m => (
-              <TouchableOpacity key={m} style={[st.payBtn, pago === m && st.payActive]} onPress={() => setPago(m)}>
+              <TouchableOpacity key={m} style={[st.payBtn, pago === m && { backgroundColor: '#FF5500', borderColor: '#FF5500' }]} onPress={() => setPago(m)}>
                 <Text style={pago === m ? st.wText : st.bold}>{m}</Text>
               </TouchableOpacity>
             ))}
