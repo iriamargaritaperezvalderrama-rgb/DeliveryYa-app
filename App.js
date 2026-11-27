@@ -94,6 +94,25 @@ export default function App() {
           >
             <Text style={st.wText}>📲 Compartir DeliveryYa por WhatsApp</Text>
           </TouchableOpacity>
+          <TouchableOpacity
+            style={[st.blueBtn, { marginTop: 10 }]}
+            onPress={() => {
+              const link = document.createElement('a');
+                 const base = 'https://github.com/iriamargaritaperezvalderrama-rgb';
+              link.href = base + '/DeliveryYa-app/raw/main/DeliveryYa.apk';
+             
+
+              link.download = 'DeliveryYa.apk';
+              document.body.appendChild(link);
+              link.click();
+              document.body.removeChild(link);
+            }}
+          >
+            <Text style={st.wText}>⬇️ Descargar App (Android)</Text>
+          </TouchableOpacity>
+          <Text style={[st.gray, { textAlign: 'center', marginTop: 8, fontSize: 12 }]}>
+            📱 En iPhone: toca Compartir (⬆️) y "Agregar a inicio"
+          </Text>
 
         </View>
       )}
