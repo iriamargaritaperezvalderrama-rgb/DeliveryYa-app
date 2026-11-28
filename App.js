@@ -151,14 +151,14 @@ export default function App() {
           <Text style={st.sTitle}>🛒 Tu Pedido</Text>
           {carrito.map(i => (
             <View key={i.uid} style={st.platoCard}>
-              <View style={{ flex: 1 }}><Text style={st.bold}>{i.nombre}</Text><Text style={st.gray}>{i.restNombre} • ${i.precio.toFixed(2)}</Text></View>
+              <View style={{ flex: 1 }}><Text style={st.bold}>{i.nombre}</Text><Text style={st.gray}>{i.restNombre} • • ${Number(i.precio || 0).toFixed(2)}</Text></View>
               <TouchableOpacity onPress={() => quitar(i.uid)}><Text style={{ color: 'red', fontWeight: 'bold' }}>Quitar</Text></TouchableOpacity>
             </View>
           ))}
           <SelectorZonas />
           <View style={st.box}>
-            <Text>Comida: ${subtotal().toFixed(2)} | Delivery: ${zonaSel.precio.toFixed(2)}</Text>
-            <Text style={[st.bold, { fontSize: 16, marginTop: 4 }]}>Total a pagar: ${(subtotal() + zonaSel.precio).toFixed(2)}</Text>
+            <Text>Comida: ${subtotal().toFixed(2)} | Delivery: ${ Number(zonaSel?.precio || 0).toFixed(2)}</Text>
+            <Text style={[st.bold, { fontSize: 16, marginTop: 4 }]}>Total a pagar: ${(subtotal() + Number(zonaSel?.precio || 0) ).toFixed(2)}</Text>
           </View>
           <View style={st.payRow}>
             {['Efectivo ($)', 'Pago Móvil', 'Zelle'].map(m => (
