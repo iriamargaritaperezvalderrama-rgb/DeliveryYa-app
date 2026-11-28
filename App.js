@@ -21,7 +21,7 @@ export default function App() {
 
   const agregar = (plato, restNombre) => setCarrito([...carrito, { ...plato, restNombre, uid: Math.random().toString() }]);
   const quitar = (uid) => setCarrito(carrito.filter(i => i.uid !== uid));
-  const subtotal = () => carrito.reduce((s, i) => s + i.precio, 0);
+  const subtotal = () => carrito.reduce((s, i) => s + Number(i.precio || 0), 0);
 
   const abrirWhatsapp = (numero, msg) => {
     const cleanNum = String(numero).replace(/[^0-9]/g, '');
@@ -82,7 +82,7 @@ export default function App() {
           <TouchableOpacity
             style={[st.okBtn, { marginTop: 12 }]}
             onPress={() => {
-              const textoCompartir = '🛵 ¡Pide comida o envía encomiendas rápido con *DeliveryYaa@*! Entra aquí: https://github.io';
+              const textoCompartir = '🛵 ¡Pide comida o envía encomiendas rápido con *DeliveryYaa@*! Entra aquí: https://iriamargaritaperezvalderrama-rgb.github.io/DeliveryYa-app/';
               const link = document.createElement('a');
               link.href = 'whatsapp://send?text=' + encodeURIComponent(textoCompartir);
               document.body.appendChild(link);
@@ -96,7 +96,7 @@ export default function App() {
             style={[st.blueBtn, { marginTop: 10 }]}
             onPress={() => {
               const link = document.createElement('a');
-              const base = 'https://github.io';
+              const base = 'https://iriamargaritaperezvalderrama-rgb.github.io';
               link.href = base + '/DeliveryYa-app/DeliveryYa.apk';
               link.download = 'DeliveryYa.apk';
               document.body.appendChild(link);
