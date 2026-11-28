@@ -44,10 +44,15 @@ jobs:
           '
       - run: sed -i 's|</head>|<link rel="manifest" href="/DeliveryYa-app/manifest.json" /></head>|' dist/index.html
       - run: cp DeliveryYa.apk dist/DeliveryYa.apk
+      - run: cp -r public/.well-known dist/ && touch dist/.nojekyll
+      
+
 
       - uses: actions/upload-pages-artifact@v3
         with:
           path: dist
+          include-hidden-files: true
+
   deploy:
     needs: build
     runs-on: ubuntu-latest
